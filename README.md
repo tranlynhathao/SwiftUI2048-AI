@@ -4,8 +4,6 @@ This is a simple game to demonstrate the new SwiftUI framework.
 
 > Note that the game algorithm may have issues, and this is still WIP.
 
-![Screenshot](Screenshot.png)
-
 # 2048 AI
 
  An AI made for the game 2048.
