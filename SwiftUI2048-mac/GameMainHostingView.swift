@@ -1,5 +1,5 @@
 //
-//  Swift_2048_AIApp.swift
+//  GameMainHostingView.swift
 //  Swift_2048_AI
 //
 //  Created by Trần Lý Nhật Hào on 2/5/25.
