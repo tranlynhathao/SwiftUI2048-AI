@@ -5,7 +5,6 @@
 //  Created by Trần Lý Nhật Hào on 2/5/25.
 //
 
-
 import SwiftUI
 
 extension View {
@@ -20,4 +19,3 @@ postfix operator >*
 postfix func >*<V>(lhs: V) -> AnyView where V: View {
     return lhs.eraseToAnyView()
 }
-

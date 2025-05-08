@@ -129,4 +129,3 @@ struct BlockMatrix<T> : CustomDebugStringConvertible where T: Block {
     }
 
 }
-

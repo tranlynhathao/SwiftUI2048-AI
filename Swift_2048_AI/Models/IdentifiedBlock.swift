@@ -13,4 +13,3 @@ struct IdentifiedBlock: Block {
     var number: Int
 
 }
-
