@@ -1,8 +1,9 @@
 //
 //  IdentifiedBlock.swift
-//  Swift_2048_AI
+//  SwiftUI2048
 //
-//  Created by Trần Lý Nhật Hào on 4/5/25.
+//  Created by Hongyu on 6/5/19.
+//  Copyright © 2019 Cyandev. All rights reserved.
 //
 
 import Foundation

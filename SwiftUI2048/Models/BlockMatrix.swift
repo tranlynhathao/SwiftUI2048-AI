@@ -1,8 +1,8 @@
 //
 //  BlockMatrix.swift
-//  Swift_2048_AI
+//  SwiftU2048_AI
 //
-//  Created by Trần Lý Nhật Hào on 4/5/25.
+//  Created by Trần Lý Nhật Hào on 13/5/25.
 //
 
 import Foundation
