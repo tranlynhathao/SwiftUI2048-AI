@@ -83,3 +83,45 @@ iOSInjectionProject/
 # macOS
 .DS_Store
 
+# === Swift Package Manager ===
+/.build/
+/Packages/
+/.swiftpm/xcode/package.xcworkspace
+
+# === Carthage ===
+Carthage/Build/
+
+# === CocoaPods ===
+Pods/
+Podfile.lock
+
+# === Fastlane ===
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+
+# === Archives and Logs ===
+*.xcarchive
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# === Debug Symbols and Logs ===
+*.log
+*.moved-aside
+*.swp
+
+# === C++ build artifacts ===
+*.o
+*.out
+*.a
+*.so
+*.exe
+
+# === Xcode Auto-generated Preview ===
+*.xcassets/Preview Content/
+
+# === User-specific files ===
+*.iml
+.idea/
+*.orig

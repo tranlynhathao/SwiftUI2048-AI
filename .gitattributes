@@ -1,1 +1,23 @@
+# Make sure Swift and C++ are detected properly
+*.swift linguist-language=Swift
+*.h linguist-language=C++
+*.cpp linguist-language=C++
+*.mm linguist-language=Objective-C++
+
+# Treat line endings consistently (especially nếu làm việc nhóm)
+*.swift text eol=lf
+*.h text eol=lf
+*.cpp text eol=lf
+*.mm text eol=lf
+*.xib text eol=lf
+*.storyboard text eol=lf
+
+# Mark binary files to avoid diff
+*.png binary
+*.jpg binary
+*.gif binary
+*.mov binary
+*.xcassets binary
+*.xcarchive binary
+*.ipa binary
 
