@@ -11,6 +11,8 @@ This is a simple game to demonstrate the new SwiftUI framework.
 
  The AI reached the 32768 tile in the browser version after 5 attempts and achieved the score of 630032. Below is the screenshot of that game.
 
+![Demo](input.gif)
+
 ## Supported Platforms
 
 * iOS 13.0+
