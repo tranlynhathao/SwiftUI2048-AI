@@ -1,3 +1,7 @@
+#pragma once
+
+#include "board.hpp"
+
 class Heuristic {
 private:
   float heurTable[65536];

@@ -1,10 +1,12 @@
+#pragma once
+
 #include <algorithm>
 #include <cmath>
 
 typedef unsigned long long board_t;
 typedef unsigned short row_t;
 
-int MaxRank(board_t s) {
+inline int MaxRank(board_t s) {
   int maxrank = 0;
   for (; s; s >>= 4)
     maxrank = std::max(maxrank, int(s & 0xf));
@@ -26,7 +28,7 @@ int MaxRank(board_t s) {
 //     return count;
 // }
 
-int CountEmpty(board_t b) {
+inline int CountEmpty(board_t b) {
   b = ~b;
   b &= b >> 2;
   b &= b >> 1;
@@ -35,7 +37,7 @@ int CountEmpty(board_t b) {
   return b;
 }
 
-board_t Transpose(board_t x) {
+inline board_t Transpose(board_t x) {
   board_t t;
   t = (x ^ (x >> 12)) & 0x0000f0f00000f0f0ull;
   x ^= t ^ (t << 12);
@@ -44,7 +46,7 @@ board_t Transpose(board_t x) {
   return x;
 }
 
-row_t ReverseRow(row_t row) {
+inline row_t ReverseRow(row_t row) {
   return (row >> 12) | ((row >> 4) & 0x00F0) | ((row << 4) & 0x0F00) |
          (row << 12);
 }

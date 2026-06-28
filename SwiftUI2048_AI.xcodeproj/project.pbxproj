@@ -33,6 +33,9 @@
 		FA8D101122AD0F1F0056756D /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA633E3A22A79B1200DE6288 /* GameView.swift */; };
 		FA8D101222AD0F3E0056756D /* FunctionalUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6F2B2022A81832009C2D3B /* FunctionalUtils.swift */; };
 		FA8D101522AD137D0056756D /* GameMainHostingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8D101322AD13230056756D /* GameMainHostingView.swift */; };
+		0E06080702040505030A0C0A /* AIPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D010D0B0B0E0A0C0B04090B /* AIPlayer.swift */; };
+		0AED5E1F00000000000000A1 /* AIBridgeSelfTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AED5E1F00000000000000A2 /* AIBridgeSelfTest.swift */; };
+		0004060E0A0E02070000050A /* AIBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0E0E0E0B01030608070D0F07 /* AIBridge.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -75,6 +78,11 @@
 		FA8D100722AD0E950056756D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FA8D100822AD0E950056756D /* SwiftUI2048_mac.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SwiftUI2048_mac.entitlements; sourceTree = "<group>"; };
 		FA8D101322AD13230056756D /* GameMainHostingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameMainHostingView.swift; sourceTree = "<group>"; };
+		0D010D0B0B0E0A0C0B04090B /* AIPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIPlayer.swift; sourceTree = "<group>"; };
+		0AED5E1F00000000000000A2 /* AIBridgeSelfTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIBridgeSelfTest.swift; sourceTree = "<group>"; };
+		000E020E060D070B0D040207 /* AIBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AIBridge.h; sourceTree = "<group>"; };
+		0E0E0E0B01030608070D0F07 /* AIBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AIBridge.cpp; sourceTree = "<group>"; };
+		0C01030C0C01030709050603 /* SwiftUI2048-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SwiftUI2048-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,7 +119,8 @@
 				FA8D0FFA22AD0E8E0056756D /* SwiftUI2048-mac */,
 				FA633E1C22A77D1C00DE6288 /* Products */,
 				FA132EFB22A95F9100BD9743 /* Frameworks */,
-			);
+
+			020B00040D0A0F0706020A0B /* cpp */,);
 			sourceTree = "<group>";
 		};
 		FA633E1C22A77D1C00DE6288 /* Products */ = {
@@ -137,7 +146,8 @@
 				FA132EF922A94D9400BD9743 /* MainMenu.xib */,
 				FA633E2C22A77D1D00DE6288 /* Info.plist */,
 				FA633E2622A77D1D00DE6288 /* Preview Content */,
-			);
+
+				0C01030C0C01030709050603 /* SwiftUI2048-Bridging-Header.h */,);
 			path = SwiftUI2048;
 			sourceTree = "<group>";
 		};
@@ -165,7 +175,9 @@
 				FA633E3622A7928400DE6288 /* BlockMatrix.swift */,
 				FA633E3822A79AFA00DE6288 /* GameLogic.swift */,
 				FA633E3E22A7BDBB00DE6288 /* IdentifiedBlock.swift */,
-			);
+
+				0D010D0B0B0E0A0C0B04090B /* AIPlayer.swift */,
+				0AED5E1F00000000000000A2 /* AIBridgeSelfTest.swift */,);
 			path = Models;
 			sourceTree = "<group>";
 		};
@@ -189,6 +201,15 @@
 				FA8D100222AD0E950056756D /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		020B00040D0A0F0706020A0B /* cpp */ = {
+			isa = PBXGroup;
+			children = (
+				000E020E060D070B0D040207 /* AIBridge.h */,
+				0E0E0E0B01030608070D0F07 /* AIBridge.cpp */,
+			);
+			path = cpp;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -321,7 +342,10 @@
 				FA8D101022AD0F1F0056756D /* BlockGridView.swift in Sources */,
 				FA8D101122AD0F1F0056756D /* GameView.swift in Sources */,
 				FA8D0FFC22AD0E8E0056756D /* AppDelegate.swift in Sources */,
-			);
+
+				0E06080702040505030A0C0A /* AIPlayer.swift in Sources */,
+				0AED5E1F00000000000000A1 /* AIBridgeSelfTest.swift in Sources */,
+				0004060E0A0E02070000050A /* AIBridge.cpp in Sources */,);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
@@ -529,6 +553,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "haotran.SwiftUI2048-AI-mac";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "SwiftUI2048/SwiftUI2048-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -552,6 +577,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "haotran.SwiftUI2048-AI-mac";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "SwiftUI2048/SwiftUI2048-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

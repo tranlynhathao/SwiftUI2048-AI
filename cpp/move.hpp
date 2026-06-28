@@ -1,3 +1,7 @@
+#pragma once
+
+#include "board.hpp"
+
 class Move {
 public:
   Move() {

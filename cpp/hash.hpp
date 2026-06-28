@@ -1,3 +1,6 @@
+#pragma once
+
+#include "board.hpp"
 #include <chrono>
 #include <random>
 
