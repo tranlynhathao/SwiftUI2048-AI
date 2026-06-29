@@ -1,0 +1,21 @@
+{
+  "name": "swiftui2048-ai-web",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Web demo of the 2048 AI: C++ Expectimax compiled to WebAssembly.",
+  "scripts": {
+    "dev": "vite",
+    "build:wasm": "bash scripts/build-wasm.sh",
+    "build:wasm:node": "bash scripts/build-wasm.sh node",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "npm run build:wasm:node && node scripts/selftest.mjs",
+    "selftest": "node scripts/selftest.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.0"
+  }
+}

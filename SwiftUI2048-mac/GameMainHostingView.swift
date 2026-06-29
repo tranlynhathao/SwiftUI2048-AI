@@ -48,24 +48,58 @@ class GameMainHostingView: NSHostingView<GameViewWrapper> {
             return
         }
 
+        // Command-key combos (Cmd-N etc.) are handled by the menu/responder
+        // chain — don't intercept them here.
+        if event.modifierFlags.contains(.command) {
+            super.keyDown(with: event)
+            return
+        }
+
+        // Non-arrow shortcuts that work regardless of game state.
+        switch event.keyCode {
+        case 49: // Space — Start/Pause AI
+            gameLogic.isAIModeEnabled.toggle()
+            return
+        case 1: // S — Step once
+            gameLogic.stepAI()
+            return
+        case 45: // N — New Game
+            newGame()
+            return
+        case 24, 69: // = / + (and keypad +) — faster
+            cycleSpeed(faster: true)
+            return
+        case 27, 78: // - (and keypad -) — slower
+            cycleSpeed(faster: false)
+            return
+        default:
+            break
+        }
+
+        // Arrow keys: manual play. Ignored once the game is over.
+        guard !gameLogic.isGameOver else { return }
+
         withTransaction(Transaction(animation: .spring())) {
             switch event.keyCode {
             case 125:
                 self.gameLogic.move(.down)
-                return
             case 123:
                 self.gameLogic.move(.left)
-                return
             case 124:
                 self.gameLogic.move(.right)
-                return
             case 126:
                 self.gameLogic.move(.up)
-                return
             default:
-                return
+                super.keyDown(with: event)
             }
         }
+    }
+
+    private func cycleSpeed(faster: Bool) {
+        let all = GameLogic.AISpeed.allCases
+        guard let idx = all.firstIndex(of: gameLogic.aiSpeed) else { return }
+        let next = faster ? min(idx + 1, all.count - 1) : max(idx - 1, 0)
+        gameLogic.aiSpeed = all[next]
     }
 
     func newGame() {

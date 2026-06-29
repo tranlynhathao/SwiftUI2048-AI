@@ -125,3 +125,4 @@ fastlane/screenshots/
 *.iml
 .idea/
 *.orig
+docs/

@@ -28,7 +28,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 #endif
 
         window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 600, height: 600),
+            contentRect: NSRect(x: 0, y: 0, width: 480, height: 720),
             styleMask: [.titled, .closable, .miniaturizable, .fullSizeContentView],
             backing: .buffered, defer: false)
         window.titlebarAppearsTransparent = true
@@ -56,7 +56,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /// proving the in-app integrated autoplay path works and stays responsive.
     private func runHeadlessAITest() {
         let game = GameLogic()
-        game.aiMoveDelay = 0.02
+        game.aiSpeed = .turbo
         headlessGame = game
         game.isAIModeEnabled = true
         NSLog("HeadlessAITest: started")
@@ -69,14 +69,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // while the background search produces moves.
         for i in 1...5 {
             DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.6) {
-                NSLog("HeadlessAITest: t=%.1fs maxTile=%d gameOver=%@ thinking=%@",
-                      Double(i) * 0.6, maxTile(),
+                NSLog("HeadlessAITest: t=%.1fs score=%d moves=%d maxTile=%d won=%@ gameOver=%@ thinking=%@",
+                      Double(i) * 0.6, game.score, game.moveCount, maxTile(),
+                      game.hasWon ? "true" : "false",
                       game.isGameOver ? "true" : "false",
                       game.isAIThinking ? "true" : "false")
             }
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 3.4) {
-            NSLog("HeadlessAITest: DONE maxTile=%d", maxTile())
+            NSLog("HeadlessAITest: DONE score=%d best=%d moves=%d maxTile=%d",
+                  game.score, game.bestScore, game.moveCount, maxTile())
             NSApplication.shared.terminate(nil)
         }
     }

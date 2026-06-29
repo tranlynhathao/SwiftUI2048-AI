@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="description" content="2048 AI powered by a C++ Expectimax engine compiled to WebAssembly." />
+    <title>2048 AI · C++ Expectimax in WebAssembly</title>
+  </head>
+  <body>
+    <main class="app">
+      <header class="header">
+        <div class="title-row">
+          <h1>2048 <span class="accent">AI</span></h1>
+          <span id="win-badge" class="badge hidden">2048 reached</span>
+        </div>
+        <p class="subtitle">C++ Expectimax autoplay, compiled to WebAssembly</p>
+      </header>
+
+      <section class="scores">
+        <div class="score-card"><span class="label">Score</span><span id="score" class="value">0</span></div>
+        <div class="score-card"><span class="label">Best</span><span id="best" class="value">0</span></div>
+        <div class="score-card"><span class="label">Moves</span><span id="moves" class="value">0</span></div>
+        <div class="score-card" id="maxtile-card"><span class="label">Max Tile</span><span id="maxtile" class="value">—</span></div>
+      </section>
+
+      <section class="board-wrap">
+        <div id="board" class="board" aria-label="2048 board"></div>
+        <div id="overlay" class="overlay hidden">
+          <div class="overlay-card">
+            <h2>Game Over</h2>
+            <dl id="overlay-stats"></dl>
+            <button id="overlay-newgame" class="btn primary">New Game</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="controls">
+        <div class="control-row">
+          <button id="newgame" class="btn">New Game</button>
+          <button id="startpause" class="btn primary">Start AI</button>
+          <button id="step" class="btn">Step</button>
+          <button id="resetbest" class="btn subtle">Reset Best</button>
+        </div>
+        <div class="control-row segmented-row">
+          <div class="seg-group">
+            <span class="seg-label">Speed</span>
+            <div id="speed" class="segmented" role="group">
+              <button data-speed="slow">Slow</button>
+              <button data-speed="normal" class="active">Normal</button>
+              <button data-speed="fast">Fast</button>
+              <button data-speed="turbo">Turbo</button>
+            </div>
+          </div>
+          <div class="seg-group">
+            <span class="seg-label">Depth</span>
+            <div id="depth" class="segmented" role="group">
+              <button data-depth="1" class="active">1</button>
+              <button data-depth="2">2</button>
+              <button data-depth="3">3</button>
+            </div>
+          </div>
+        </div>
+        <div class="status-row">
+          <span id="status-dot" class="dot"></span>
+          <span id="status-text">Loading AI…</span>
+          <span id="aux-stats" class="aux"></span>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <span>Native macOS&nbsp;+&nbsp;WebAssembly demo</span>
+        <span class="sep">·</span>
+        <span>C++ AI&nbsp;→&nbsp;WASM</span>
+        <span class="sep">·</span>
+        <a id="repo-link" href="https://github.com/tranlynhathao/SwiftUI2048-AI" target="_blank" rel="noopener">GitHub</a>
+      </footer>
+    </main>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -26,6 +26,52 @@ final class GameLogic : ObservableObject {
             case .left: return 3
             }
         }
+
+        var symbol: String {
+            switch self {
+            case .up: return "↑"
+            case .right: return "→"
+            case .down: return "↓"
+            case .left: return "←"
+            }
+        }
+    }
+
+    /// AI pacing presets. `delay` is the gap between moves; turbo runs as fast
+    /// as the search allows (still one move at a time, never overlapping).
+    enum AISpeed: String, CaseIterable, Identifiable {
+        case slow, normal, fast, turbo
+        var id: String { rawValue }
+        var delay: TimeInterval {
+            switch self {
+            case .slow: return 0.5
+            case .normal: return 0.2
+            case .fast: return 0.08
+            case .turbo: return 0.0
+            }
+        }
+        var label: String {
+            switch self {
+            case .slow: return "Slow"
+            case .normal: return "Normal"
+            case .fast: return "Fast"
+            case .turbo: return "Turbo"
+            }
+        }
+    }
+
+    /// High-level status for the UI.
+    enum AIStatus {
+        case manual, running, thinking, gameOver
+
+        var label: String {
+            switch self {
+            case .manual: return "Manual"
+            case .running: return "Running"
+            case .thinking: return "Thinking…"
+            case .gameOver: return "Game Over"
+            }
+        }
     }
 
     typealias BlockMatrixType = BlockMatrix<IdentifiedBlock>
@@ -39,8 +85,32 @@ final class GameLogic : ObservableObject {
 
     @Published fileprivate(set) var lastGestureDirection: Direction = .up
 
+    // MARK: - Score / stats model
+
+    @Published fileprivate(set) var score: Int = 0
+    @Published fileprivate(set) var bestScore: Int = 0
+    @Published fileprivate(set) var moveCount: Int = 0
+    @Published fileprivate(set) var maxTile: Int = 0
     /// True once no move can change the board.
     @Published fileprivate(set) var isGameOver: Bool = false
+    /// Latches true when a 2048 tile is reached (play continues).
+    @Published fileprivate(set) var hasWon: Bool = false
+    /// The most recent move chosen by the AI (nil for manual moves / fresh game).
+    @Published fileprivate(set) var lastAIDirection: Direction?
+
+    private let bestScoreKey = "com.swiftui2048.bestScore"
+    private(set) var gameStartDate = Date()
+    private(set) var gameEndDate: Date?
+
+    /// Duration of the current (or finished) game.
+    var elapsed: TimeInterval {
+        (gameEndDate ?? Date()).timeIntervalSince(gameStartDate)
+    }
+
+    var movesPerSecond: Double {
+        let t = elapsed
+        return t > 0 ? Double(moveCount) / t : 0
+    }
 
     @Published var isAIModeEnabled: Bool = false {
         didSet {
@@ -53,6 +123,31 @@ final class GameLogic : ObservableObject {
         }
     }
 
+    @Published var aiSpeed: AISpeed = .normal {
+        didSet {
+            aiMoveDelay = aiSpeed.delay
+            objectWillChange.send(self)
+        }
+    }
+
+    /// Search depth / strength. Changing it rebuilds the AI instance.
+    @Published var aiDepth: Int = 1 {
+        didSet {
+            guard aiDepth != oldValue else { return }
+#if os(macOS)
+            rebuildAI()
+#endif
+            objectWillChange.send(self)
+        }
+    }
+
+    var status: AIStatus {
+        if isGameOver { return .gameOver }
+        if isAIThinking { return .thinking }
+        if isAIModeEnabled { return .running }
+        return .manual
+    }
+
     fileprivate var _globalID = 0
     fileprivate var newGlobalID: Int {
         _globalID += 1
@@ -62,19 +157,22 @@ final class GameLogic : ObservableObject {
     // MARK: - AI state
 
     /// True while a search is in flight; guards against overlapping AI calls.
-    private(set) var isAIThinking = false
-    /// Delay between AI moves (seconds). Adjustable from the UI.
-    var aiMoveDelay: TimeInterval = 0.25
+    @Published private(set) var isAIThinking = false
+    /// Delay between AI moves (seconds), derived from `aiSpeed`.
+    private(set) var aiMoveDelay: TimeInterval = AISpeed.normal.delay
 
 #if os(macOS)
-    // The C++ AI bridge is only wired into the macOS target. On other targets
-    // (iOS / Mac Catalyst) the AI is compile-guarded out; see the report.
-    private let aiPlayer: AIPlayer? = AIPlayer(depth: 1)
+    // The C++ AI bridge is only wired into the macOS target. Other targets
+    // compile without the bridge.
+    private var aiPlayer: AIPlayer? = AIPlayer(depth: 1)
     /// Background queue so the (potentially slow) C++ search never blocks the UI.
     private let aiQueue = DispatchQueue(label: "com.swiftui2048.ai", qos: .userInitiated)
+    /// True when a delayed step is already queued (prevents double scheduling).
+    private var aiStepPending = false
 #endif
 
     init() {
+        bestScore = UserDefaults.standard.integer(forKey: bestScoreKey)
         newGame()
     }
 
@@ -83,14 +181,21 @@ final class GameLogic : ObservableObject {
     }
 
     func newGame() {
+        // Pause the AI loop while we reset, then resume if it was on.
         let wasAIEnabled = isAIModeEnabled
-        // Pause the AI loop while we reset.
         isAIModeEnabled = false
 
         _blockMatrix = BlockMatrixType()
         resetLastGestureDirection()
+        score = 0
+        moveCount = 0
         isGameOver = false
+        hasWon = false
+        lastAIDirection = nil
+        gameStartDate = Date()
+        gameEndDate = nil
         generateNewBlocks(count: 2) // Start with 2 blocks
+        maxTile = currentMaxTile()
 
         objectWillChange.send(self)
 
@@ -101,6 +206,12 @@ final class GameLogic : ObservableObject {
 
     func resetLastGestureDirection() {
         lastGestureDirection = .up
+    }
+
+    func resetBestScore() {
+        bestScore = 0
+        UserDefaults.standard.set(0, forKey: bestScoreKey)
+        objectWillChange.send(self)
     }
 
     // MARK: - Board snapshot helpers
@@ -118,18 +229,26 @@ final class GameLogic : ObservableObject {
         return grid
     }
 
+    private func currentMaxTile() -> Int {
+        valueGrid().flatMap { $0 }.max() ?? 0
+    }
+
     // MARK: - Moves
 
-    /// Apply a move. A new tile is spawned only when the board actually changed.
+    /// Apply a move. A new tile is spawned only when the board actually changed,
+    /// and the score increases by the value of each merged tile.
     func move(_ direction: Direction) {
         defer {
             objectWillChange.send(self)
         }
 
+        guard !isGameOver else { return }
+
         lastGestureDirection = direction
 
         // Snapshot before mutating so we can detect a real change robustly.
         let before = valueGrid()
+        var gainedScore = 0
 
         let axis = direction == .left || direction == .right
         for row in 0..<4 {
@@ -141,7 +260,7 @@ final class GameLogic : ObservableObject {
                 }
             }
 
-            merge(blocks: &compactRow, reverse: direction == .down || direction == .right)
+            gainedScore += merge(blocks: &compactRow, reverse: direction == .down || direction == .right)
 
             var newRow = [IdentifiedBlock?]()
             compactRow.forEach { newRow.append($0) }
@@ -162,18 +281,31 @@ final class GameLogic : ObservableObject {
 
         let moved = valueGrid() != before
         if moved {
+            score += gainedScore
+            moveCount += 1
+            if score > bestScore {
+                bestScore = score
+                UserDefaults.standard.set(bestScore, forKey: bestScoreKey)
+            }
             generateNewBlocks(count: 1) // Add 1 block after a real move
         }
 
+        maxTile = currentMaxTile()
+        if maxTile >= 2048 { hasWon = true }
+
         // Update game-over state after the board settles.
         isGameOver = !anyMovePossible()
+        if isGameOver { gameEndDate = Date() }
     }
 
-    fileprivate func merge(blocks: inout [IdentifiedBlock], reverse: Bool) {
+    /// Slide+merge one line. Returns the score gained (sum of merged tile values).
+    @discardableResult
+    fileprivate func merge(blocks: inout [IdentifiedBlock], reverse: Bool) -> Int {
         if reverse {
             blocks = blocks.reversed()
         }
 
+        var gained = 0
         blocks = blocks
             .map { (false, $0) }
             .reduce([(Bool, IdentifiedBlock)]()) { acc, item in
@@ -181,6 +313,7 @@ final class GameLogic : ObservableObject {
                     var accPrefix = Array(acc.dropLast())
                     var mergedBlock = item.1
                     mergedBlock.number *= 2
+                    gained += mergedBlock.number
                     accPrefix.append((true, mergedBlock))
                     return accPrefix
                 } else {
@@ -194,6 +327,7 @@ final class GameLogic : ObservableObject {
         if reverse {
             blocks = blocks.reversed()
         }
+        return gained
     }
 
     @discardableResult fileprivate func generateNewBlocks(count: Int = 1) -> Bool {
@@ -291,32 +425,45 @@ final class GameLogic : ObservableObject {
     }
 
     private func stopAIPlaying() {
-        // Nothing to invalidate: pacing is driven by isAIModeEnabled guards.
+        // Pacing is driven by the isAIModeEnabled guard inside the scheduled
+        // block and the completion handler; any in-flight search finishes, then
+        // the loop simply stops rescheduling.
     }
 
-    /// Perform a single AI move on demand (used by the "Step" control).
+    /// Perform a single AI move on demand (used by the "Step" control). Works
+    /// whether the AI loop is running or paused; it never overlaps a search.
     func stepAI() {
 #if os(macOS)
-        guard aiPlayer != nil, !isAIThinking, !isGameOver else { return }
-        computeAndApply(continueRunning: false)
+        computeAndApply()
 #endif
     }
 
 #if os(macOS)
+    private func rebuildAI() {
+        // Safe even if a search is in flight: the in-flight closure retains the
+        // old AIPlayer instance until it completes.
+        aiPlayer = AIPlayer(depth: aiDepth)
+    }
+
     /// Schedule the next AI step after the configured delay.
     private func scheduleNextAIStep() {
-        guard isAIModeEnabled else { return }
+        guard isAIModeEnabled, !aiStepPending else { return }
+        aiStepPending = true
         DispatchQueue.main.asyncAfter(deadline: .now() + aiMoveDelay) { [weak self] in
-            guard let self = self, self.isAIModeEnabled else { return }
-            self.computeAndApply(continueRunning: true)
+            guard let self = self else { return }
+            self.aiStepPending = false
+            guard self.isAIModeEnabled else { return }
+            self.computeAndApply()
         }
     }
 
     /// Run the search off the main thread, then apply on the main thread.
-    private func computeAndApply(continueRunning: Bool) {
+    /// The isAIThinking guard guarantees a single search at a time.
+    private func computeAndApply() {
         guard let ai = aiPlayer, !isAIThinking, !isGameOver else { return }
 
         isAIThinking = true
+        objectWillChange.send(self)
         // BlockMatrix is a value type; this copy is a safe cross-thread snapshot.
         let snapshot = _blockMatrix!
 
@@ -327,17 +474,21 @@ final class GameLogic : ObservableObject {
                 self.isAIThinking = false
 
                 if let direction = direction {
+                    self.lastAIDirection = direction
                     self.move(direction)
                 } else {
                     // No legal move: game over.
                     self.isGameOver = true
+                    self.gameEndDate = Date()
                     self.isAIModeEnabled = false
-                    self.objectWillChange.send(self)
                 }
 
-                if continueRunning && self.isAIModeEnabled && !self.isGameOver {
+                // Continue the loop as long as the AI is enabled and the game
+                // is live — regardless of whether this was an auto or manual step.
+                if self.isAIModeEnabled && !self.isGameOver {
                     self.scheduleNextAIStep()
                 }
+                self.objectWillChange.send(self)
             }
         }
     }

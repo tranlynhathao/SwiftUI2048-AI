@@ -32,6 +32,16 @@ struct BlockView : View {
         (Color(red:0.91, green:0.75, blue:0.24, opacity:1.00), Color.white),
         // 2048
         (Color(red:0.91, green:0.74, blue:0.18, opacity:1.00), Color.white),
+        // 4096
+        (Color(red:0.40, green:0.31, blue:0.52, opacity:1.00), Color.white),
+        // 8192
+        (Color(red:0.34, green:0.27, blue:0.62, opacity:1.00), Color.white),
+        // 16384
+        (Color(red:0.22, green:0.43, blue:0.66, opacity:1.00), Color.white),
+        // 32768
+        (Color(red:0.15, green:0.52, blue:0.62, opacity:1.00), Color.white),
+        // 65536
+        (Color(red:0.13, green:0.54, blue:0.45, opacity:1.00), Color.white),
     ]
 
     fileprivate let number: Int?
@@ -79,10 +89,8 @@ struct BlockView : View {
         guard let number = number else {
             return (Color(red:0.78, green:0.73, blue:0.68, opacity:1.00), Color.black)
         }
-        let index = Int(log2(Double(number))) - 1
-        if index < 0 || index >= colorScheme.count {
-            fatalError("No color for such number")
-        }
+        // Clamp so very large tiles (the AI can reach 16384+) never crash.
+        let index = max(0, min(Int(log2(Double(number))) - 1, colorScheme.count - 1))
         return colorScheme[index]
     }
 
