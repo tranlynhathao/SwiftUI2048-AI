@@ -8,6 +8,7 @@
 #ifndef SwiftUI2048_Bridging_Header_h
 #define SwiftUI2048_Bridging_Header_h
 
-#include "../cpp/AIBridge.h"
+// Path is relative to this header's new location (Native/Shared/AI/).
+#include "../../../cpp/AIBridge.h"
 
 #endif /* SwiftUI2048_Bridging_Header_h */

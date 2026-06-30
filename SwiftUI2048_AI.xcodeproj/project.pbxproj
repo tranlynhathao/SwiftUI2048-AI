@@ -36,6 +36,8 @@
 		0E06080702040505030A0C0A /* AIPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D010D0B0B0E0A0C0B04090B /* AIPlayer.swift */; };
 		0AED5E1F00000000000000A1 /* AIBridgeSelfTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AED5E1F00000000000000A2 /* AIBridgeSelfTest.swift */; };
 		0004060E0A0E02070000050A /* AIBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0E0E0E0B01030608070D0F07 /* AIBridge.cpp */; };
+		0FE57A0100000000000000B1 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FE57A0100000000000000B0 /* Palette.swift */; };
+		0FE57A0100000000000000B2 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FE57A0100000000000000B0 /* Palette.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -83,6 +85,7 @@
 		000E020E060D070B0D040207 /* AIBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AIBridge.h; sourceTree = "<group>"; };
 		0E0E0E0B01030608070D0F07 /* AIBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AIBridge.cpp; sourceTree = "<group>"; };
 		0C01030C0C01030709050603 /* SwiftUI2048-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SwiftUI2048-Bridging-Header.h"; sourceTree = "<group>"; };
+		0FE57A0100000000000000B0 /* Palette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,12 +118,11 @@
 			isa = PBXGroup;
 			children = (
 				FA633E4222A7FFD000DE6288 /* README.md */,
-				FA633E1D22A77D1C00DE6288 /* SwiftUI2048 */,
-				FA8D0FFA22AD0E8E0056756D /* SwiftUI2048-mac */,
+				0FE57A0100000000000000A0 /* Native */,
+				020B00040D0A0F0706020A0B /* cpp */,
 				FA633E1C22A77D1C00DE6288 /* Products */,
 				FA132EFB22A95F9100BD9743 /* Frameworks */,
-
-			020B00040D0A0F0706020A0B /* cpp */,);
+			);
 			sourceTree = "<group>";
 		};
 		FA633E1C22A77D1C00DE6288 /* Products */ = {
@@ -132,31 +134,36 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		FA633E1D22A77D1C00DE6288 /* SwiftUI2048 */ = {
+		0FE57A0100000000000000A0 /* Native */ = {
 			isa = PBXGroup;
 			children = (
-				FA132EF822A90EFD00BD9743 /* SwiftUI2048.entitlements */,
-				FA6F2B2022A81832009C2D3B /* FunctionalUtils.swift */,
-				FA3EC97522AE3F9000D43738 /* SwiftUIExtensions.swift */,
-				FA633E3522A7926200DE6288 /* Models */,
-				FA633E3222A77D3400DE6288 /* Views */,
-				FA633E1E22A77D1C00DE6288 /* AppDelegate.swift */,
-				FA633E2422A77D1D00DE6288 /* Assets.xcassets */,
-				FA633E2922A77D1D00DE6288 /* LaunchScreen.storyboard */,
-				FA132EF922A94D9400BD9743 /* MainMenu.xib */,
-				FA633E2C22A77D1D00DE6288 /* Info.plist */,
-				FA633E2622A77D1D00DE6288 /* Preview Content */,
-
-				0C01030C0C01030709050603 /* SwiftUI2048-Bridging-Header.h */,);
-			path = SwiftUI2048;
+				0FE57A0100000000000000A1 /* Shared */,
+				0FE57A0100000000000000A5 /* macOS */,
+				0FE57A0100000000000000A9 /* iOS */,
+			);
+			path = Native;
 			sourceTree = "<group>";
 		};
-		FA633E2622A77D1D00DE6288 /* Preview Content */ = {
+		0FE57A0100000000000000A1 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				FA633E2722A77D1D00DE6288 /* Preview Assets.xcassets */,
+				FA633E3522A7926200DE6288 /* Models */,
+				FA633E3222A77D3400DE6288 /* Views */,
+				0FE57A0100000000000000A2 /* AI */,
+				0FE57A0100000000000000A3 /* Theme */,
+				0FE57A0100000000000000A4 /* Support */,
 			);
-			path = "Preview Content";
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		FA633E3522A7926200DE6288 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FA633E3622A7928400DE6288 /* BlockMatrix.swift */,
+				FA633E3822A79AFA00DE6288 /* GameLogic.swift */,
+				FA633E3E22A7BDBB00DE6288 /* IdentifiedBlock.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		FA633E3222A77D3400DE6288 /* Views */ = {
@@ -169,36 +176,121 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		FA633E3522A7926200DE6288 /* Models */ = {
+		0FE57A0100000000000000A2 /* AI */ = {
 			isa = PBXGroup;
 			children = (
-				FA633E3622A7928400DE6288 /* BlockMatrix.swift */,
-				FA633E3822A79AFA00DE6288 /* GameLogic.swift */,
-				FA633E3E22A7BDBB00DE6288 /* IdentifiedBlock.swift */,
-
 				0D010D0B0B0E0A0C0B04090B /* AIPlayer.swift */,
-				0AED5E1F00000000000000A2 /* AIBridgeSelfTest.swift */,);
-			path = Models;
+				0AED5E1F00000000000000A2 /* AIBridgeSelfTest.swift */,
+				0C01030C0C01030709050603 /* SwiftUI2048-Bridging-Header.h */,
+			);
+			path = AI;
 			sourceTree = "<group>";
 		};
-		FA8D0FFA22AD0E8E0056756D /* SwiftUI2048-mac */ = {
+		0FE57A0100000000000000A3 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				0FE57A0100000000000000B0 /* Palette.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		0FE57A0100000000000000A4 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				FA6F2B2022A81832009C2D3B /* FunctionalUtils.swift */,
+				FA3EC97522AE3F9000D43738 /* SwiftUIExtensions.swift */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		0FE57A0100000000000000A5 /* macOS */ = {
+			isa = PBXGroup;
+			children = (
+				0FE57A0100000000000000A6 /* App */,
+				0FE57A0100000000000000A7 /* Resources */,
+				0FE57A0100000000000000A8 /* Config */,
+			);
+			path = macOS;
+			sourceTree = "<group>";
+		};
+		0FE57A0100000000000000A6 /* App */ = {
 			isa = PBXGroup;
 			children = (
 				FA8D101322AD13230056756D /* GameMainHostingView.swift */,
 				FA8D0FFB22AD0E8E0056756D /* AppDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		0FE57A0100000000000000A7 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
 				FA8D0FFF22AD0E950056756D /* Assets.xcassets */,
 				FA8D100422AD0E950056756D /* Main.storyboard */,
-				FA8D100722AD0E950056756D /* Info.plist */,
-				FA8D100822AD0E950056756D /* SwiftUI2048_mac.entitlements */,
 				FA8D100122AD0E950056756D /* Preview Content */,
 			);
-			path = "SwiftUI2048-mac";
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		0FE57A0100000000000000A8 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				FA8D100722AD0E950056756D /* Info.plist */,
+				FA8D100822AD0E950056756D /* SwiftUI2048_mac.entitlements */,
+			);
+			path = Config;
 			sourceTree = "<group>";
 		};
 		FA8D100122AD0E950056756D /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
 				FA8D100222AD0E950056756D /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		0FE57A0100000000000000A9 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				0FE57A0100000000000000AA /* App */,
+				0FE57A0100000000000000AB /* Resources */,
+				0FE57A0100000000000000AC /* Config */,
+			);
+			path = iOS;
+			sourceTree = "<group>";
+		};
+		0FE57A0100000000000000AA /* App */ = {
+			isa = PBXGroup;
+			children = (
+				FA633E1E22A77D1C00DE6288 /* AppDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		0FE57A0100000000000000AB /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FA633E2422A77D1D00DE6288 /* Assets.xcassets */,
+				FA633E2922A77D1D00DE6288 /* LaunchScreen.storyboard */,
+				FA132EF922A94D9400BD9743 /* MainMenu.xib */,
+				FA633E2622A77D1D00DE6288 /* Preview Content */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		0FE57A0100000000000000AC /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				FA633E2C22A77D1D00DE6288 /* Info.plist */,
+				FA132EF822A90EFD00BD9743 /* SwiftUI2048.entitlements */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		FA633E2622A77D1D00DE6288 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				FA633E2722A77D1D00DE6288 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";
@@ -325,6 +417,7 @@
 				FA633E1F22A77D1C00DE6288 /* AppDelegate.swift in Sources */,
 				FA633E3722A7928500DE6288 /* BlockMatrix.swift in Sources */,
 				FA633E3B22A79B1200DE6288 /* GameView.swift in Sources */,
+				0FE57A0100000000000000B2 /* Palette.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -345,6 +438,7 @@
 
 				0E06080702040505030A0C0A /* AIPlayer.swift in Sources */,
 				0AED5E1F00000000000000A1 /* AIBridgeSelfTest.swift in Sources */,
+				0FE57A0100000000000000B1 /* Palette.swift in Sources */,
 				0004060E0A0E02070000050A /* AIBridge.cpp in Sources */,);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -489,23 +583,22 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = SwiftUI2048/SwiftUI2048.entitlements;
-				DERIVE_UIKITFORMAC_PRODUCT_BUNDLE_IDENTIFIER = YES;
-				DEVELOPMENT_ASSET_PATHS = "SwiftUI2048/Preview\\ Content";
+				CODE_SIGN_ENTITLEMENTS = Native/iOS/Config/SwiftUI2048.entitlements;
+				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = NO;
+				DEVELOPMENT_ASSET_PATHS = "Native/iOS/Resources/Preview\\ Content";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = SwiftUI2048/Info.plist;
+				INFOPLIST_FILE = Native/iOS/Config/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "haotran.SwiftUI2048-AI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTS_UIKITFORMAC = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,6";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -514,23 +607,22 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = SwiftUI2048/SwiftUI2048.entitlements;
-				DERIVE_UIKITFORMAC_PRODUCT_BUNDLE_IDENTIFIER = YES;
-				DEVELOPMENT_ASSET_PATHS = "SwiftUI2048/Preview\\ Content";
+				CODE_SIGN_ENTITLEMENTS = Native/iOS/Config/SwiftUI2048.entitlements;
+				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = NO;
+				DEVELOPMENT_ASSET_PATHS = "Native/iOS/Resources/Preview\\ Content";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = SwiftUI2048/Info.plist;
+				INFOPLIST_FILE = Native/iOS/Config/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "haotran.SwiftUI2048-AI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTS_UIKITFORMAC = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,6";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -538,13 +630,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "SwiftUI2048-mac/SwiftUI2048_mac.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Native/macOS/Config/SwiftUI2048_mac.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_ASSET_PATHS = "SwiftUI2048-mac/Preview\\ Content";
+				DEVELOPMENT_ASSET_PATHS = "Native/macOS/Resources/Preview\\ Content";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = "SwiftUI2048-mac/Info.plist";
+				INFOPLIST_FILE = "Native/macOS/Config/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -553,7 +645,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "haotran.SwiftUI2048-AI-mac";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = "SwiftUI2048/SwiftUI2048-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Native/Shared/AI/SwiftUI2048-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -562,13 +654,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "SwiftUI2048-mac/SwiftUI2048_mac.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Native/macOS/Config/SwiftUI2048_mac.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_ASSET_PATHS = "SwiftUI2048-mac/Preview\\ Content";
+				DEVELOPMENT_ASSET_PATHS = "Native/macOS/Resources/Preview\\ Content";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = "SwiftUI2048-mac/Info.plist";
+				INFOPLIST_FILE = "Native/macOS/Config/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -577,7 +669,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "haotran.SwiftUI2048-AI-mac";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = "SwiftUI2048/SwiftUI2048-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Native/Shared/AI/SwiftUI2048-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

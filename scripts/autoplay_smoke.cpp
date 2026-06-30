@@ -17,14 +17,20 @@
 using Grid = std::array<std::array<int, 4>, 4>;
 
 static int nibbleIndex(int row, int col) { return (3 - row) * 4 + (3 - col); }
-static int rankOf(int v) { int r = 0; while (v > 1) { v >>= 1; ++r; } return r; }
+static int rankOf(int v) {
+  int r = 0;
+  while (v > 1) {
+    v >>= 1;
+    ++r;
+  }
+  return r;
+}
 
 static uint64_t encode(const Grid &g) {
   uint64_t b = 0;
   for (int r = 0; r < 4; ++r)
     for (int c = 0; c < 4; ++c)
-      if (g[r][c] > 0)
-        b |= static_cast<uint64_t>(rankOf(g[r][c])) << (nibbleIndex(r, c) * 4);
+      if (g[r][c] > 0) b |= static_cast<uint64_t>(rankOf(g[r][c])) << (nibbleIndex(r, c) * 4);
   return b;
 }
 static Grid decode(uint64_t b) {
@@ -40,7 +46,7 @@ static bool spawn(Grid &g) {
   std::vector<std::pair<int, int>> empty;
   for (int r = 0; r < 4; ++r)
     for (int c = 0; c < 4; ++c)
-      if (g[r][c] == 0) empty.push_back({r, c});
+      if (g[r][c] == 0) empty.push_back({ r, c });
   if (empty.empty()) return false;
   auto p = empty[rand() % empty.size()];
   g[p.first][p.second] = (rand() % 10 == 0) ? 4 : 2;
@@ -48,19 +54,25 @@ static bool spawn(Grid &g) {
 }
 static int maxTile(const Grid &g) {
   int m = 0;
-  for (auto &row : g) for (int v : row) if (v > m) m = v;
+  for (auto &row : g)
+    for (int v : row)
+      if (v > m) m = v;
   return m;
 }
 
 int main() {
   srand(12345); // deterministic
   void *ai = AI_Init(2);
-  if (!ai) { printf("autoplay_smoke: FAIL (AI_Init returned null)\n"); return 1; }
+  if (!ai) {
+    printf("autoplay_smoke: FAIL (AI_Init returned null)\n");
+    return 1;
+  }
 
   int games = 3, reached512 = 0, best = 0;
   for (int game = 0; game < games; ++game) {
     Grid g{};
-    spawn(g); spawn(g);
+    spawn(g);
+    spawn(g);
     int moves = 0, noop = 0;
     for (;;) {
       uint64_t board = encode(g);
@@ -68,7 +80,11 @@ int main() {
       if (dir < 0) break; // game over
       uint64_t after = AI_ApplyMove(board, dir);
       if (after == board) { // should not happen: AI only returns legal moves
-        if (++noop > 3) { printf("autoplay_smoke: FAIL (no-op loop)\n"); AI_Release(ai); return 1; }
+        if (++noop > 3) {
+          printf("autoplay_smoke: FAIL (no-op loop)\n");
+          AI_Release(ai);
+          return 1;
+        }
         continue;
       }
       noop = 0;

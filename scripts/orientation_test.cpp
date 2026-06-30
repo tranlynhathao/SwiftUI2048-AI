@@ -24,7 +24,10 @@ static int nibbleIndex(int row, int col) { return (3 - row) * 4 + (3 - col); }
 
 static int rankOf(int v) { // v is a positive power of two
   int r = 0;
-  while (v > 1) { v >>= 1; ++r; }
+  while (v > 1) {
+    v >>= 1;
+    ++r;
+  }
   return r;
 }
 
@@ -32,8 +35,7 @@ static uint64_t encode(const Grid &g) {
   uint64_t b = 0;
   for (int r = 0; r < 4; ++r)
     for (int c = 0; c < 4; ++c)
-      if (g[r][c] > 0)
-        b |= static_cast<uint64_t>(rankOf(g[r][c])) << (nibbleIndex(r, c) * 4);
+      if (g[r][c] > 0) b |= static_cast<uint64_t>(rankOf(g[r][c])) << (nibbleIndex(r, c) * 4);
   return b;
 }
 
@@ -49,7 +51,7 @@ static Grid decode(uint64_t b) {
 
 // Reference standard-2048 slide/merge (toward index 0), no spawning.
 static std::array<int, 4> slideMerge(std::array<int, 4> line) {
-  std::array<int, 4> out{0, 0, 0, 0};
+  std::array<int, 4> out{ 0, 0, 0, 0 };
   int tiles[4];
   int n = 0;
   for (int i = 0; i < 4; ++i)
@@ -73,19 +75,19 @@ static Grid reference(const Grid &in, int dir) {
     for (int r = 0; r < 4; ++r) g[r] = slideMerge(g[r]);
   } else if (dir == 1) { // right
     for (int r = 0; r < 4; ++r) {
-      std::array<int, 4> rev{g[r][3], g[r][2], g[r][1], g[r][0]};
+      std::array<int, 4> rev{ g[r][3], g[r][2], g[r][1], g[r][0] };
       auto m = slideMerge(rev);
-      g[r] = {m[3], m[2], m[1], m[0]};
+      g[r] = { m[3], m[2], m[1], m[0] };
     }
   } else if (dir == 0) { // up
     for (int c = 0; c < 4; ++c) {
-      std::array<int, 4> col{g[0][c], g[1][c], g[2][c], g[3][c]};
+      std::array<int, 4> col{ g[0][c], g[1][c], g[2][c], g[3][c] };
       auto m = slideMerge(col);
       for (int r = 0; r < 4; ++r) g[r][c] = m[r];
     }
   } else if (dir == 2) { // down
     for (int c = 0; c < 4; ++c) {
-      std::array<int, 4> col{g[3][c], g[2][c], g[1][c], g[0][c]};
+      std::array<int, 4> col{ g[3][c], g[2][c], g[1][c], g[0][c] };
       auto m = slideMerge(col);
       for (int r = 0; r < 4; ++r) g[3 - r][c] = m[r];
     }
@@ -102,14 +104,14 @@ static void printGrid(const Grid &g) {
 
 int main() {
   std::vector<Grid> boards = {
-      {{{2, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-      {{{2, 4, 8, 16}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-      {{{2, 0, 0, 0}, {4, 0, 0, 0}, {8, 0, 0, 0}, {16, 0, 0, 0}}},
-      {{{2, 2, 2, 0}, {0, 4, 4, 0}, {8, 0, 8, 0}, {0, 0, 0, 2}}},
-      {{{2, 4, 2, 4}, {4, 2, 4, 2}, {2, 4, 2, 4}, {4, 2, 4, 0}}},
+    { { { 2, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 } } },
+    { { { 2, 4, 8, 16 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 } } },
+    { { { 2, 0, 0, 0 }, { 4, 0, 0, 0 }, { 8, 0, 0, 0 }, { 16, 0, 0, 0 } } },
+    { { { 2, 2, 2, 0 }, { 0, 4, 4, 0 }, { 8, 0, 8, 0 }, { 0, 0, 0, 2 } } },
+    { { { 2, 4, 2, 4 }, { 4, 2, 4, 2 }, { 2, 4, 2, 4 }, { 4, 2, 4, 0 } } },
   };
 
-  const char *names[4] = {"up", "right", "down", "left"};
+  const char *names[4] = { "up", "right", "down", "left" };
   int failures = 0;
   int checks = 0;
 
